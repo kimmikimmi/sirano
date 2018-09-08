@@ -1,11 +1,10 @@
 package com.example.demo.es.repository;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * @author : Jaden
@@ -16,12 +15,14 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Setter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Article {
 
 	@Id
+	@Field(type = FieldType.Text)
 	private String id;
 
+	@Field(type = FieldType.Text)
 	private String title;
-
 
 }

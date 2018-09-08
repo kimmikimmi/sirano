@@ -29,7 +29,10 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
-	compile('org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.4.0')
+//	compile 'org.elasticsearch:elasticsearch:5.5.0'
+//	compile 'org.elasticsearch.client:transport:5.5.0'
+
+//	compile('org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.4.0')
 	compile "org.springframework.boot:spring-boot-starter-web"
 	compile group: 'com.google.guava', name: 'guava', version: '22.0'
 	compileOnly('org.projectlombok:lombok')
