@@ -7,18 +7,64 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-
+		classpath('se.transmode.gradle:gradle-docker:1.2')
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.0.RC2"
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
+//jar {
+//	baseName = 'sirano-api'
+//	version = '0.0.1'
+//}
+//
+//task print() {
+//	doLast {
+//		println "github push complete"
+//	}
+//}
+//
+//task buildDocker(type: Docker, dependsOn: build) {
+//	push = true
+//	applicationName = jar.baseName
+//	dockerfile = file('src/main/docker/Dockerfile')
+//	doFirst {
+//		copy {
+//			from jar
+//			into stageDir
+//		}
+//	}
+//}
+
+task buildDocker(type: Docker, dependsOn: build) {
+	push = false
+	applicationName = rootProject.name
+	dockerfile = file('src/main/docker/Dockerfile')
+
+	doFirst {
+		// Rename the app jar to "app.jar" so that the Dockerfile does not require renames
+		copy {
+			from "${project.buildDir}/libs"
+			into stageDir
+			include "${rootProject.name}-${version}.jar"
+			rename("${rootProject.name}-${version}.jar", "app.jar")
+		}
+	}
+
+	doLast {
+		println "Run the Docker Container"
+		println "docker run -ti -p 8081:8081 $project.group/$applicationName:$version"
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -28,9 +74,12 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
-//	compile 'org.elasticsearch:elasticsearch:5.5.0'
-//	compile 'org.elasticsearch.client:transport:5.5.0'
+
+	compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.4.0'
+	compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.4.0'
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+
+//	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
 
 //	compile('org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.4.0')
 	compile "org.springframework.boot:spring-boot-starter-web"
