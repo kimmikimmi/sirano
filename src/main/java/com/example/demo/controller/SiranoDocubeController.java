@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RequestMapping(value = "/docube")
+@RestController
 public class SiranoDocubeController {
 
 	@RequestMapping(value = "/{userId}/{docubeId}", method = RequestMethod.DELETE)

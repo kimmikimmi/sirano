@@ -13,7 +13,8 @@ import java.util.List;
  * @author : Jaden
  * @since : 20/09/2018
  */
-@RestController("/docube/search")
+@RequestMapping(value = "/docube/search")
+@RestController
 @Slf4j
 public class SiranoSearchController {
 	@RequestMapping(value = "/most-popular/{userId}", method = RequestMethod.GET)
@@ -75,7 +76,6 @@ public class SiranoSearchController {
 	public List<DocubeDto> DocubesBytag(@RequestParam String tag, @RequestParam int offset, @RequestParam int limit,
 		@PathVariable String userId) {
 		Preconditions.checkNotNull(userId);
-		Category categoryEnum = Category.valueOf(tag);
 
 		DocubeDto d1 = new DocubeDto();
 		d1.setDocubeId(1L);
@@ -103,7 +103,6 @@ public class SiranoSearchController {
 	public List<DocubeDto> docubesBykeyWord(@RequestParam String keyword, @RequestParam int offset, @RequestParam int limit,
 		@PathVariable String userId) {
 		Preconditions.checkNotNull(userId);
-		Category categoryEnum = Category.valueOf(keyword);
 
 		DocubeDto d1 = new DocubeDto();
 		d1.setDocubeId(1L);
