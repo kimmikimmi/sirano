@@ -1,6 +1,7 @@
 package com.example.demo.es.repository;
 
 import com.example.demo.es.DefaultActionListener;
+import com.example.demo.es.util.ESNameFactory;
 import com.google.gson.Gson;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -10,6 +11,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
@@ -22,31 +24,29 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public abstract class ESRepository<T> {
 
 	protected RestHighLevelClient client;
+	protected final String indexName = ESNameFactory.getIndex();
+	protected String type;
 
 	@Autowired
 	public ESRepository(RestHighLevelClient client) {
 		this.client = client;
 	}
 
-	public void createIndex(String indexName, T document) {
+	public void createIndex(T document) {
 		Gson gson = new Gson();
 
-		IndexRequest request = new IndexRequest(indexName);
+		IndexRequest request = new IndexRequest(indexName, indexName);
 
 		request.source(gson.toJson(document), XContentType.JSON);
 		client.indexAsync(request, RequestOptions.DEFAULT, new DefaultActionListener<>());
 	}
 
-	public void createType(String indexName, String typeName, T document) {
+	public void insert(T document) {
 		Gson gson = new Gson();
-		IndexRequest request = new IndexRequest(indexName, typeName);
+		IndexRequest request = new IndexRequest(indexName, type);
 
 		request.source(gson.toJson(document), XContentType.JSON);
 		client.indexAsync(request, RequestOptions.DEFAULT, new DefaultActionListener<>());
 	}
-
-
-
-
 
 }

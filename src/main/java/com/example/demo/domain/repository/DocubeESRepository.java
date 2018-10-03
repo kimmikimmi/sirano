@@ -4,6 +4,7 @@ import com.example.demo.domain.data.Docube;
 import com.example.demo.es.DefaultActionListener;
 import com.example.demo.es.repository.ESRepository;
 import com.example.demo.es.repository.ElasticSearchRepository;
+import com.example.demo.es.util.ESNameFactory;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,9 +37,14 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 		super(client);
 	}
 
+	@PostConstruct
+	public void init() {
+		super.type = ESNameFactory.getType(Docube.class);
+	}
+
 	@Override
-	public List<Docube> searchAll(String index) throws IOException {
-		SearchRequest searchRequest = new SearchRequest(index);
+	public List<Docube> searchAll() throws IOException {
+		SearchRequest searchRequest = new SearchRequest(indexName);
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
@@ -47,8 +54,8 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 	}
 
 	@Override
-	public List<Docube> searchAll(String index, String type) throws IOException {
-		SearchRequest searchRequest = new SearchRequest(index, type);
+	public List<Docube> searchAllInType() throws IOException {
+		SearchRequest searchRequest = new SearchRequest(indexName, type);
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
@@ -77,10 +84,11 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 		}
 	}
 
-	public void delete(String indexName, String typeName, String documentId) throws IOException {
+	@Override
+	public void delete(String documentId) throws IOException {
 		UpdateRequest updateRequest = new UpdateRequest();
 		updateRequest.index(indexName);
-		updateRequest.type(typeName);
+		updateRequest.type(type);
 		updateRequest.id(documentId);
 
 		updateRequest.doc(jsonBuilder()
@@ -91,15 +99,15 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 		client.updateAsync(updateRequest, RequestOptions.DEFAULT, new DefaultActionListener<>());
 	}
 
-	public void incleaseLike(String indexName, String typeName, String documentId) throws IOException {
+	public void increaseLike(String documentId) throws IOException {
 		UpdateRequest updateRequest = new UpdateRequest();
 		updateRequest.index(indexName);
-		updateRequest.type(typeName);
+		updateRequest.type(type);
 		updateRequest.id(documentId);
 
 		Gson gson = new Gson();
 
-		GetRequest getRequest = new GetRequest(indexName, typeName, documentId);
+		GetRequest getRequest = new GetRequest(indexName, type, documentId);
 
 		GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
 		Docube docube = gson.fromJson(getResponse.getSourceAsString(), Docube.class);

@@ -9,12 +9,25 @@ import java.util.List;
  */
 public interface ElasticSearchRepository<T> {
 
-	void createIndex(String indexName, T entity);
+	/**
+	 * index 내 모든 범위에서 검색한다. MATCH_ALL
+	 * @return
+	 * @throws IOException
+	 */
+	List<T> searchAll() throws IOException;
 
-	void createType(String indexName, String typeName, T entity);
+	/**
+	 * index 내 특정 타입으로 검색한다
+	 * @return
+	 * @throws IOException
+	 */
+	List<T> searchAllInType() throws IOException;
 
-	List<T> searchAll(String index) throws IOException;
-
-	List<T> searchAll(String index, String type) throws IOException;
+	/**
+	 * 해당 documentId 에 해당하는 document 를 제거한다.
+	 * @param documentId
+	 * @throws IOException
+	 */
+	void delete(String documentId) throws IOException;
 
 }

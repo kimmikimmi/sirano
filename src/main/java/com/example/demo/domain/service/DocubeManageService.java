@@ -27,12 +27,12 @@ public class DocubeManageService {
 
 	public void putDocube(DocubeDto docubeDto) {
 
-		docubeESRepository.createType("sirano", "docube", DocubeConverter.toDocube(docubeDto));
+		docubeESRepository.insert(DocubeConverter.toDocube(docubeDto));
 	}
 
 	public List<DocubeDto> searchAll() throws IOException {
 		try {
-			return docubeESRepository.searchAll("sirano")
+			return docubeESRepository.searchAllInType()
 				.stream()
 				.map(DocubeConverter::toDocubeDto)
 				.collect(Collectors.toList());
@@ -43,11 +43,11 @@ public class DocubeManageService {
 	}
 
 	public void delete(String docubeId) throws IOException {
-		docubeESRepository.delete("sirano", "docube", docubeId);
+		docubeESRepository.delete(docubeId);
 
 	}
 
 	public void increaseLike(String docubeId) throws IOException {
-		docubeESRepository.incleaseLike("sirano", "docube", docubeId);
+		docubeESRepository.increaseLike(docubeId);
 	}
 }
