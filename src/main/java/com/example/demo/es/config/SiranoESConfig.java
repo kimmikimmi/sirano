@@ -1,5 +1,6 @@
-package com.example.demo.es;
+package com.example.demo.es.config;
 
+import com.example.demo.es.ElasticsearchProperties;
 import lombok.Value;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;

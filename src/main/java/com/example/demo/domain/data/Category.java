@@ -1,4 +1,4 @@
-package com.example.demo.data;
+package com.example.demo.domain.data;
 
 import lombok.Getter;
 

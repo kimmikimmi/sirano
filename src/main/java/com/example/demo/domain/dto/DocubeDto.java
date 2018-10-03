@@ -1,7 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.domain.dto;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,17 +15,22 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
+@Accessors(chain = true)
 public class DocubeDto {
-	private Long docubeId;
+	private String docubeId;
+	private String userId;
+
 	private String title;
 	private String body;
 
 	private long like;
-	private long dislike;
 
 	private List<String> tags;
 
 	private String writer;
 
 	private String category;
+
+	private Date updatedDate;
+	private Date createdDate;
 }

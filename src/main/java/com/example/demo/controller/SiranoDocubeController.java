@@ -1,11 +1,17 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.DocubeDto;
+import com.example.demo.domain.data.Category;
+import com.example.demo.domain.dto.DocubeDto;
+import com.example.demo.domain.service.DocubeManageService;
 import com.example.demo.response.SiranoResponse;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 
 /**
  * @author : Jaden
@@ -16,82 +22,61 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class SiranoDocubeController {
 
-	@RequestMapping(value = "/{userId}/{docubeId}", method = RequestMethod.DELETE)
+	private final DocubeManageService docubeManageService;
+
+	@Autowired
+	public SiranoDocubeController(DocubeManageService docubeManageService) {
+		this.docubeManageService = docubeManageService;
+	}
+
+	@RequestMapping(value = "/{docubeId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public SiranoResponse delete(@PathVariable String userId, @PathVariable Long docubeId) {
-		Preconditions.checkNotNull(userId);
+	public SiranoResponse delete(@PathVariable String docubeId) throws IOException {
 		Preconditions.checkNotNull(docubeId);
 
+		docubeManageService.delete(docubeId);
 		log.info("userId : {}, docubeId : {] 인 Docube 를 제거 ");
-		/*
-			docubeId 인 docube 의 isDeleted 필드 true 로 수정
-
-		 */
 
 		return new SiranoResponse()
 			.setStatusCode("200")
 			.setMessage("제거 성공! \n" +
-				"docubeId : " + docubeId + "\n" +
-				"userId : " + userId);
+				"docubeId : " + docubeId);
 	}
 
-	@RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
-	public SiranoResponse insert(@PathVariable String userId, @RequestBody DocubeDto docube) {
+	public SiranoResponse insert(@RequestBody DocubeDto docube) {
 		Preconditions.checkNotNull(docube);
-		Preconditions.checkNotNull(userId);
 
-		// insert
+		if (StringUtils.isEmpty(docube.getTitle())) {
+			docube = new DocubeDto()
+				.setTitle("미션임파서블")
+				.setBody("톰크루즈 잘생겼다")
+				.setCategory(Category.ENTERTAINMENT.name())
+				.setWriter("톰크루즈")
+				.setTags(Lists.newArrayList("톰", "크루즈", "액션"))
+				.setLike(1);
+		}
+
+		docubeManageService.putDocube(docube);
 
 		return new SiranoResponse()
 			.setStatusCode("200")
-			.setMessage("새 도큐브 생성 성공 \n" +
-				"userId : " + userId + "\n" +
-				"docubeId : " + 1L);
-
-	}
-
-	@RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-	@ResponseBody
-	public SiranoResponse update(@PathVariable String userId, @RequestBody DocubeDto docube) {
-		Preconditions.checkNotNull(docube);
-		Preconditions.checkNotNull(userId);
-
-		// insert
-
-		return new SiranoResponse()
-			.setStatusCode("200")
-			.setMessage(" 도큐브 업데이트 성공 \n" +
-				"userId : " + userId + "\n" +
-				"docubeId : " + 1L);
-
+			.setMessage("새 도큐브 생성 성공 ");
 	}
 
 	@RequestMapping(value = "/like/{docubeId}", method = RequestMethod.POST)
 	@ResponseBody
-	public SiranoResponse like(@PathVariable Long docubeId) {
+	public SiranoResponse like(@PathVariable String docubeId) throws IOException {
 		Preconditions.checkNotNull(docubeId);
 
-		//like
+		docubeManageService.increaseLike(docubeId);
 
 		return new SiranoResponse()
 			.setStatusCode("200")
 			.setMessage(" 도큐브 like 성공 \n" +
-				"docubeId : " + 1L);
+				"docubeId : " + docubeId);
 
 	}
 
-	@RequestMapping(value = "/dislike/{docubeId}", method = RequestMethod.POST)
-	@ResponseBody
-	public SiranoResponse dislike(@PathVariable Long docubeId) {
-		Preconditions.checkNotNull(docubeId);
-
-		//dislike
-
-		return new SiranoResponse()
-			.setStatusCode("200")
-			.setMessage(" 도큐브 dislike 성공 \n" +
-				"docubeId : " + 1L);
-
-	}
 }

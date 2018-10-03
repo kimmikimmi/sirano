@@ -13,8 +13,8 @@ public interface ElasticSearchRepository<T> {
 
 	void createType(String indexName, String typeName, T entity);
 
-	List<T> lookAllUp(String index) throws IOException;
+	List<T> searchAll(String index) throws IOException;
 
-	List<T> lookAllUp(String index, String type) throws IOException;
+	List<T> searchAll(String index, String type) throws IOException;
 
 }

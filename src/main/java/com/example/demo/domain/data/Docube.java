@@ -1,4 +1,4 @@
-package com.example.demo.data;
+package com.example.demo.domain.data;
 
 import lombok.*;
 
@@ -15,13 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Docube {
-	private Long docubeId;
+	private String id;
 
 	private String title;
 	private String body;
 
 	private long like;
-	private long dislike;
 
 	private List<String> tags;
 
@@ -33,4 +32,6 @@ public class Docube {
 	private Date updateDate;
 
 	private boolean isDeleted;
+
+	private String userId;
 }

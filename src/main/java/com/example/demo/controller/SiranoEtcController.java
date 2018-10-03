@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.data.Category;
+import com.example.demo.domain.data.Category;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
