@@ -119,4 +119,5 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 
 		client.updateAsync(updateRequest, RequestOptions.DEFAULT, new DefaultActionListener<>());
 	}
+
 }

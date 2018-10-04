@@ -50,4 +50,5 @@ public class DocubeManageService {
 	public void increaseLike(String docubeId) throws IOException {
 		docubeESRepository.increaseLike(docubeId);
 	}
+
 }

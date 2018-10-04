@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.data.Category;
 import com.example.demo.domain.dto.DocubeDto;
+import com.example.demo.domain.service.DocubeManageService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +19,17 @@ import java.util.List;
 @RestController
 @Slf4j
 public class SiranoSearchController {
+
+	private final DocubeManageService docubeManageService;
+
+	@Autowired
+	public SiranoSearchController(DocubeManageService docubeManageService) {
+		this.docubeManageService = docubeManageService;
+	}
+
 	@RequestMapping(value = "/most-popular/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<DocubeDto> mostPopularDocubes(@RequestParam int offset, @RequestParam int limit, @PathVariable String userId) {
+	public List<DocubeDto> mostPopularDocubes(@RequestParam int offset, @RequestParam int fetchCount, @PathVariable String userId) {
 		Preconditions.checkNotNull(userId);
 
 		DocubeDto d1 = new DocubeDto();
