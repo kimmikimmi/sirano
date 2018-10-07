@@ -1,6 +1,8 @@
 package com.example.demo.domain.repository;
 
+import com.example.demo.domain.data.Category;
 import com.example.demo.domain.data.Docube;
+import com.example.demo.domain.dto.DocubeDto;
 import com.example.demo.es.DefaultActionListener;
 import com.example.demo.es.repository.ESRepository;
 import com.example.demo.es.repository.ElasticSearchRepository;
@@ -15,8 +17,11 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +44,7 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 
 	@PostConstruct
 	public void init() {
+		super.clazz = Docube.class;
 		super.type = ESNameFactory.getType(Docube.class);
 	}
 
@@ -50,21 +56,16 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
 		searchRequest.source(searchSourceBuilder);
 
-		return searchAll(searchRequest);
+		return search(searchRequest);
 	}
 
 	@Override
 	public List<Docube> searchAllInType() throws IOException {
-		SearchRequest searchRequest = new SearchRequest(indexName, type);
 
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-		searchRequest.source(searchSourceBuilder);
-
-		return searchAll(searchRequest);
+		return Lists.newArrayList();
 	}
 
-	private List<Docube> searchAll(SearchRequest searchRequest) throws IOException {
+	private List<Docube> search(SearchRequest searchRequest) throws IOException {
 		Gson gson = new Gson();
 
 		List<Docube> docubes = Lists.newArrayList();
@@ -100,18 +101,9 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 	}
 
 	public void increaseLike(String documentId) throws IOException {
-		UpdateRequest updateRequest = new UpdateRequest();
-		updateRequest.index(indexName);
-		updateRequest.type(type);
-		updateRequest.id(documentId);
+		UpdateRequest updateRequest = new UpdateRequest(indexName, type, documentId);
 
-		Gson gson = new Gson();
-
-		GetRequest getRequest = new GetRequest(indexName, type, documentId);
-
-		GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
-		Docube docube = gson.fromJson(getResponse.getSourceAsString(), Docube.class);
-
+		Docube docube = getDocumentById(documentId);
 		updateRequest.doc(jsonBuilder()
 			.startObject()
 			.field("like", docube.getLike() + 1)
@@ -120,4 +112,68 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 		client.updateAsync(updateRequest, RequestOptions.DEFAULT, new DefaultActionListener<>());
 	}
 
+	public List<Docube> searchByUser(int offset, int limit, String userId) throws IOException {
+		SearchRequest searchRequest = new SearchRequest(indexName);
+		searchRequest.types(type);
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder
+			.query(QueryBuilders.termQuery("userId", userId))
+			.from(offset)
+			.size(limit);
+
+		searchRequest.source(searchSourceBuilder);
+
+		return search(searchRequest);
+	}
+
+	public List<Docube> searchByTag(int offset, int limit, String tag) throws IOException {
+		SearchRequest searchRequest = new SearchRequest(indexName);
+		searchRequest.types(type);
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder
+			.query(QueryBuilders.fuzzyQuery("tag", tag))
+			.from(offset)
+			.size(limit);
+
+		searchRequest.source(searchSourceBuilder);
+
+		return search(searchRequest);
+	}
+
+	public List<Docube> searchByKeyword(int offset, int limit, String keyword) throws IOException {
+		SearchRequest searchRequest = new SearchRequest(indexName);
+		searchRequest.types(type);
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder
+			.query(QueryBuilders.fuzzyQuery("title", keyword))
+			.query(QueryBuilders.fuzzyQuery("body", keyword))
+			.from(offset)
+			.size(limit);
+
+		searchRequest.source(searchSourceBuilder);
+
+		return search(searchRequest);
+	}
+
+	public List<Docube> searchByCategory(int offset, int limit, Category categoryEnum) throws IOException {
+		SearchRequest searchRequest = new SearchRequest(indexName);
+		searchRequest.types(type);
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder
+			.query(QueryBuilders.matchQuery("category", categoryEnum.name()))
+			.from(offset)
+			.size(limit);
+
+		searchRequest.source(searchSourceBuilder);
+
+		return search(searchRequest);
+	}
+
+	public List<Docube> searchInPopular(int offset, int limit, String userId) {
+		return Lists.newArrayList();
+	}
 }

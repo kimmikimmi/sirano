@@ -3,6 +3,7 @@ package com.example.demo.healthcheck;
 import com.example.demo.domain.data.Category;
 import com.example.demo.domain.dto.DocubeDto;
 import com.example.demo.domain.service.DocubeManageService;
+import com.example.demo.es.ElasticsearchProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,11 +25,14 @@ import java.util.List;
 public class HelloController {
 
 	@Autowired
+	ElasticsearchProperties elasticsearchProperties;
+
+	@Autowired
 	private DocubeManageService docubeManageService;
 
-	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+	@RequestMapping(value = "/hello/sirano", method = RequestMethod.GET)
 	@ResponseBody
-	public String hello() {
+	public String helloSirano() {
 
 		DocubeDto docubeDto = new DocubeDto()
 			.setTitle("미션임파서블")
@@ -35,6 +40,7 @@ public class HelloController {
 			.setCategory(Category.ENTERTAINMENT.name())
 			.setWriter("톰크루즈")
 			.setTags(Lists.newArrayList("톰", "크루즈", "액션"))
+			.setUserId("bright2013")
 			.setLike(1);
 
 		docubeManageService.putDocube(docubeDto);
@@ -48,4 +54,18 @@ public class HelloController {
 		return docubeManageService.searchAll();
 	}
 
+	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+	@ResponseBody
+	public String hello() {
+
+		return "Hello World!";
+	}
+	@RequestMapping(value = "/hello/", method = RequestMethod.GET)
+	@ResponseBody
+	public String hello2() {
+
+		log.warn(Arrays.toString(elasticsearchProperties.hosts()));
+
+		return Arrays.toString(elasticsearchProperties.hosts());
+	}
 }

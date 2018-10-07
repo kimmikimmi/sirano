@@ -20,6 +20,7 @@ public class DocubeConverter {
 			.setWriter(docube.getWriter())
 			.setTags(docube.getTags())
 			.setLike(docube.getLike())
+			.setUserId(docube.getUserId())
 			.setCreatedDate(docube.getCreatedDate())
 			.setUpdatedDate(docube.getUpdateDate());
 	}
@@ -33,6 +34,7 @@ public class DocubeConverter {
 		docube.setLike(docubeDto.getLike());
 		docube.setWriter(docubeDto.getWriter());
 		docube.setCategory(docubeDto.getCategory());
+		docube.setUserId(docubeDto.getUserId());
 
 		docube.setCreatedDate(new Date());
 		docube.setUpdateDate(new Date());

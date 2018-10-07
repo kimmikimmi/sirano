@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -27,118 +28,63 @@ public class SiranoSearchController {
 		this.docubeManageService = docubeManageService;
 	}
 
+	/**
+	 * search based on # of likes .
+	 * @param offset
+	 * @param limit
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping(value = "/most-popular/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<DocubeDto> mostPopularDocubes(@RequestParam int offset, @RequestParam int fetchCount, @PathVariable String userId) {
+	public List<DocubeDto> mostPopularDocubes(@RequestParam int offset, @RequestParam int limit, @PathVariable String userId) {
 		Preconditions.checkNotNull(userId);
 
-		DocubeDto d1 = new DocubeDto();
-		d1.setTitle("제시카");
-		d1.setBody("소녀시대 제시카 성형..");
-		d1.setCategory(Category.ENTERTAINMENT.getDescription());
-		d1.setLike(5);
-		d1.setWriter("공원기");
-
-		DocubeDto d2 = new DocubeDto();
-		d2.setTitle("박보검");
-		d2.setBody("박보검 키 실화..?");
-		d2.setCategory(Category.ENTERTAINMENT.getDescription());
-		d2.setLike(10);
-		d2.setWriter("김현준");
-
-		return Lists.newArrayList(d1, d2);
+		return docubeManageService.searchInPopular(offset, limit, userId);
 	}
 
 	@RequestMapping(value = "/category/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<DocubeDto> mostPopularDocubes(@RequestParam String category, @RequestParam int offset, @RequestParam int limit,
-		@PathVariable String userId) {
+	public List<DocubeDto> docubesByCategory(@RequestParam String category, @RequestParam int offset, @RequestParam int limit,
+		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
 		Category categoryEnum = Category.valueOf(category);
 
-		DocubeDto d1 = new DocubeDto();
-		d1.setTitle("제시카");
-		d1.setBody("소녀시대 제시카 성형..");
-		d1.setCategory(Category.ENTERTAINMENT.getDescription());
-		d1.setLike(5);
-		d1.setWriter("공원기");
-
-		DocubeDto d2 = new DocubeDto();
-		d2.setTitle("박보검");
-		d2.setBody("박보검 키 실화..?");
-		d2.setCategory(Category.ENTERTAINMENT.getDescription());
-		d2.setLike(10);
-		d2.setWriter("김현준");
-
-		return Lists.newArrayList(d1, d2);
+		return docubeManageService.searchInCategory(offset, limit, categoryEnum);
 	}
 
 	@RequestMapping(value = "/tag/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<DocubeDto> DocubesBytag(@RequestParam String tag, @RequestParam int offset, @RequestParam int limit,
-		@PathVariable String userId) {
+	public List<DocubeDto> DocubesByTag(@RequestParam String tag, @RequestParam int offset, @RequestParam int limit,
+		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
+		Preconditions.checkNotNull(tag);
 
-		DocubeDto d1 = new DocubeDto();
-		d1.setTitle("제시카");
-		d1.setBody("소녀시대 제시카 성형..");
-		d1.setCategory(Category.ENTERTAINMENT.getDescription());
-		d1.setLike(5);
-		d1.setWriter("공원기");
-
-		DocubeDto d2 = new DocubeDto();
-		d2.setTitle("박보검");
-		d2.setBody("박보검 키 실화..?");
-		d2.setCategory(Category.ENTERTAINMENT.getDescription());
-		d2.setLike(10);
-		d2.setWriter("김현준");
-
-		return Lists.newArrayList(d1, d2);
+		// userId 를 어떻게 확용할 수 있을까? 개인화...
+		return docubeManageService.searchByTag(offset, limit, tag);
 	}
 
 	@RequestMapping(value = "/keyword/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<DocubeDto> docubesBykeyWord(@RequestParam String keyword, @RequestParam int offset, @RequestParam int limit,
-		@PathVariable String userId) {
+	public List<DocubeDto> docubesByKeyword(@RequestParam String keyword, @RequestParam int offset, @RequestParam int limit,
+		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
+		Preconditions.checkNotNull(keyword);
 
-		DocubeDto d1 = new DocubeDto();
-		d1.setTitle("제시카");
-		d1.setBody("소녀시대 제시카 성형..");
-		d1.setCategory(Category.ENTERTAINMENT.getDescription());
-		d1.setLike(5);
-		d1.setWriter("공원기");
+		return docubeManageService.searchByKeyword(offset, limit, keyword);
 
-		DocubeDto d2 = new DocubeDto();
-		d2.setTitle("박보검");
-		d2.setBody("박보검 키 실화..?");
-		d2.setCategory(Category.ENTERTAINMENT.getDescription());
-		d2.setLike(10);
-		d2.setWriter("김현준");
-
-		return Lists.newArrayList(d1, d2);
 	}
 
+	/**
+	 * 특정 유저가 작성한 docube list search order by modified date
+	 */
 	@RequestMapping(value = "/all/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<DocubeDto> docubesByUser(@RequestParam int offset, @RequestParam int limit,
-		@PathVariable String userId) {
+		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
 
-		DocubeDto d1 = new DocubeDto();
-		d1.setTitle("제시카");
-		d1.setBody("소녀시대 제시카 성형..");
-		d1.setCategory(Category.ENTERTAINMENT.getDescription());
-		d1.setLike(5);
-		d1.setWriter("공원기");
+		return docubeManageService.searchByUser(offset, limit, userId);
 
-		DocubeDto d2 = new DocubeDto();
-		d2.setTitle("박보검");
-		d2.setBody("박보검 키 실화..?");
-		d2.setCategory(Category.ENTERTAINMENT.getDescription());
-		d2.setLike(10);
-		d2.setWriter("김현준");
-
-		return Lists.newArrayList(d1, d2);
 	}
 }
