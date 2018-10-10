@@ -13,11 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -174,6 +176,12 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 	}
 
 	public List<Docube> searchInPopular(int offset, int limit, String userId) {
+		SearchRequest searchRequest = new SearchRequest(indexName);
+		searchRequest.types(type);
+
+		SearchSourceBuilder searchRequestBuilder = new SearchSourceBuilder();
+//		searchRequestBuilder.query(QueryBuilders.constantScoreQuery(BoolQueryBuilder.))
+
 		return Lists.newArrayList();
 	}
 }

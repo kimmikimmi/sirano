@@ -34,4 +34,5 @@ public class Docube {
 	private boolean isDeleted;
 
 	private String userId;
+
 }
