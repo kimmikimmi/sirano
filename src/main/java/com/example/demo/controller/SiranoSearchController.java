@@ -5,6 +5,7 @@ import com.example.demo.domain.dto.DocubeDto;
 import com.example.demo.domain.service.DocubeManageService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,33 +19,23 @@ import java.util.List;
  */
 @RequestMapping(value = "/docube/search")
 @RestController
+@RequiredArgsConstructor
 @Slf4j
 public class SiranoSearchController {
 
 	private final DocubeManageService docubeManageService;
 
-	@Autowired
-	public SiranoSearchController(DocubeManageService docubeManageService) {
-		this.docubeManageService = docubeManageService;
-	}
-
 	/**
 	 * search based on # of likes .
-	 * @param offset
-	 * @param limit
-	 * @param userId
-	 * @return
 	 */
-	@RequestMapping(value = "/most-popular/{userId}", method = RequestMethod.GET)
-	@ResponseBody
+	@GetMapping(value = "/most-popular/{userId}")
 	public List<DocubeDto> mostPopularDocubes(@RequestParam int offset, @RequestParam int limit, @PathVariable String userId) {
 		Preconditions.checkNotNull(userId);
 
 		return docubeManageService.searchInPopular(offset, limit, userId);
 	}
 
-	@RequestMapping(value = "/category/{userId}", method = RequestMethod.GET)
-	@ResponseBody
+	@GetMapping(value = "/category/{userId}")
 	public List<DocubeDto> docubesByCategory(@RequestParam String category, @RequestParam int offset, @RequestParam int limit,
 		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
@@ -53,8 +44,7 @@ public class SiranoSearchController {
 		return docubeManageService.searchInCategory(offset, limit, categoryEnum);
 	}
 
-	@RequestMapping(value = "/tag/{userId}", method = RequestMethod.GET)
-	@ResponseBody
+	@GetMapping(value = "/tag/{userId}")
 	public List<DocubeDto> DocubesByTag(@RequestParam String tag, @RequestParam int offset, @RequestParam int limit,
 		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
@@ -64,8 +54,7 @@ public class SiranoSearchController {
 		return docubeManageService.searchByTag(offset, limit, tag);
 	}
 
-	@RequestMapping(value = "/keyword/{userId}", method = RequestMethod.GET)
-	@ResponseBody
+	@GetMapping(value = "/keyword/{userId}")
 	public List<DocubeDto> docubesByKeyword(@RequestParam String keyword, @RequestParam int offset, @RequestParam int limit,
 		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);
@@ -78,8 +67,7 @@ public class SiranoSearchController {
 	/**
 	 * 특정 유저가 작성한 docube list search order by modified date
 	 */
-	@RequestMapping(value = "/all/{userId}", method = RequestMethod.GET)
-	@ResponseBody
+	@GetMapping(value = "/all/{userId}")
 	public List<DocubeDto> docubesByUser(@RequestParam int offset, @RequestParam int limit,
 		@PathVariable String userId) throws IOException {
 		Preconditions.checkNotNull(userId);

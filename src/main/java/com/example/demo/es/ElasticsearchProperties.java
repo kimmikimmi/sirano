@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class ElasticsearchProperties {
 
-	private List<String> hosts = Lists.newArrayList("http://localhost:9200");
+	private List<String> hosts = Lists.newArrayList("http://elasticsearch:9200");
 
 	public HttpHost[] hosts() {
 		return hosts.stream().map(HttpHost::create).toArray(HttpHost[]::new);

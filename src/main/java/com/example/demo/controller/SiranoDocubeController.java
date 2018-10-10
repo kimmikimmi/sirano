@@ -6,6 +6,8 @@ import com.example.demo.domain.service.DocubeManageService;
 import com.example.demo.response.SiranoResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -19,19 +21,15 @@ import java.io.IOException;
  */
 @Slf4j
 @RequestMapping(value = "/docube")
+@RequiredArgsConstructor
 @RestController
 public class SiranoDocubeController {
 
 	private final DocubeManageService docubeManageService;
 
-	@Autowired
-	public SiranoDocubeController(DocubeManageService docubeManageService) {
-		this.docubeManageService = docubeManageService;
-	}
-
-	@RequestMapping(value = "/{docubeId}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public SiranoResponse delete(@PathVariable String docubeId) throws IOException {
+	@DeleteMapping(value = "/{docubeId}")
+	@SneakyThrows
+	public SiranoResponse delete(@PathVariable String docubeId) {
 		Preconditions.checkNotNull(docubeId);
 
 		docubeManageService.delete(docubeId);
@@ -43,8 +41,7 @@ public class SiranoDocubeController {
 				"docubeId : " + docubeId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
-	@ResponseBody
+	@PutMapping
 	public SiranoResponse insert(@RequestBody DocubeDto docube) {
 		Preconditions.checkNotNull(docube);
 
@@ -65,9 +62,9 @@ public class SiranoDocubeController {
 			.setMessage("새 도큐브 생성 성공 ");
 	}
 
-	@RequestMapping(value = "/like/{docubeId}", method = RequestMethod.POST)
-	@ResponseBody
-	public SiranoResponse like(@PathVariable String docubeId) throws IOException {
+	@PostMapping(value = "/like/{docubeId}")
+	@SneakyThrows
+	public SiranoResponse like(@PathVariable String docubeId) {
 		Preconditions.checkNotNull(docubeId);
 
 		docubeManageService.increaseLike(docubeId);
