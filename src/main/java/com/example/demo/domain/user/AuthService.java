@@ -3,6 +3,7 @@ package com.example.demo.domain.user;
 import com.example.demo.domain.user.data.User;
 import com.example.demo.domain.user.dto.UserDto;
 import com.example.demo.domain.user.repository.UserESRepository;
+import joptsimple.internal.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -62,5 +63,17 @@ public class AuthService {
 			.orElseThrow(IOException::new);
 
 		userESRepository.updateToken(user.getId(), userDto.getToken());
+	}
+
+	public boolean logOut(UserDto userDto) throws IOException {
+		if (!checkIfIsAuthorized(userDto)) {
+			return false;
+		}
+
+		val user = userESRepository.searchByUserId(userDto.getUserId())
+			.orElseThrow(IOException::new);
+
+		userESRepository.updateToken(user.getId(), Strings.EMPTY);
+		return true;
 	}
 }

@@ -25,6 +25,7 @@ public class AuthController {
 	public SiranoResponse signIn(@RequestBody UserDto userDto) throws IOException {
 		AuthParamValidator.validate(userDto);
 		authService.authorizeUser(userDto);
+
 		return new SiranoResponse("200", "userId : + " + userDto.getUserId() + " is Authorized");
 	}
 
@@ -39,8 +40,12 @@ public class AuthController {
 	}
 
 	@PostMapping("/logout")
-	public SiranoResponse logout(@RequestBody UserDto userDto) {
-		return new SiranoResponse();
+	public SiranoResponse logout(@RequestBody UserDto userDto) throws IOException {
+		AuthParamValidator.validate(userDto);
+
+		authService.logOut(userDto);
+
+		return new SiranoResponse("200", "로그아웃 성공");
 	}
 
 	@PostMapping("/authorized")
