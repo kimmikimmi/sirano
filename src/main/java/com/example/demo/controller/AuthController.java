@@ -33,7 +33,7 @@ public class AuthController {
 	}
 
 	@GetMapping("/authorized")
-	public SiranoResponse checkIfIsAuthorized() {
+	public SiranoResponse checkIfIsAuthorized(@RequestParam String userId) {
 		return new SiranoResponse();
 	}
 }

@@ -13,6 +13,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'docker'
@@ -21,6 +22,7 @@ apply plugin: 'io.spring.dependency-management'
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 //jar {
 //	baseName = 'sirano-api'
@@ -85,4 +87,11 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-web"
 	compile group: 'com.google.guava', name: 'guava', version: '22.0'
 	compileOnly('org.projectlombok:lombok')
+
+	compile group: 'cglib', name: 'cglib-nodep', version: '2.2'
+	testCompile(
+			'junit:junit:4.12',
+			'org.codehaus.groovy:groovy-all:2.4.4',
+			'org.spockframework:spock-core:1.0-groovy-2.4'
+	)
 }

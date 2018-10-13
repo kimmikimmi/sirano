@@ -34,6 +34,9 @@ public class User {
 
 	private List<String> hobbies;
 
+	private List<String> followers;
+	private List<String> followings;
+
 	@NotNull
 	private Date createDate;
 	@NotNull
