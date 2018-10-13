@@ -1,4 +1,4 @@
-package com.example.demo.domain.data;
+package com.example.demo.domain.docube.data;
 
 import lombok.Getter;
 

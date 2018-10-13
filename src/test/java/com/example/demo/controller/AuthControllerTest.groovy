@@ -1,7 +1,7 @@
 package com.example.demo.controller
 
-import com.example.demo.domain.auth.AuthService
-import com.example.demo.response.SiranoResponse
+import com.example.demo.controller.auth.AuthController
+import com.example.demo.domain.user.AuthService
 import spock.lang.Specification
 
 /**

@@ -1,19 +1,16 @@
-package com.example.demo.controller;
+package com.example.demo.controller.docube;
 
-import com.example.demo.domain.data.Category;
-import com.example.demo.domain.dto.DocubeDto;
-import com.example.demo.domain.service.DocubeManageService;
+import com.example.demo.domain.docube.data.Category;
+import com.example.demo.domain.docube.dto.DocubeDto;
+import com.example.demo.domain.docube.service.DocubeManageService;
 import com.example.demo.response.SiranoResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 /**
  * @author : Jaden

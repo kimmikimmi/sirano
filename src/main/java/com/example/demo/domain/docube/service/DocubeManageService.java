@@ -1,9 +1,9 @@
-package com.example.demo.domain.service;
+package com.example.demo.domain.docube.service;
 
-import com.example.demo.domain.DocubeConverter;
-import com.example.demo.domain.data.Category;
-import com.example.demo.domain.dto.DocubeDto;
-import com.example.demo.domain.repository.DocubeESRepository;
+import com.example.demo.domain.docube.DocubeConverter;
+import com.example.demo.domain.docube.data.Category;
+import com.example.demo.domain.docube.dto.DocubeDto;
+import com.example.demo.domain.docube.repository.DocubeESRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

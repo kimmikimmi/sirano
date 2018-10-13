@@ -1,8 +1,7 @@
-package com.example.demo.domain.repository;
+package com.example.demo.domain.docube.repository;
 
-import com.example.demo.domain.data.Category;
-import com.example.demo.domain.data.Docube;
-import com.example.demo.domain.dto.DocubeDto;
+import com.example.demo.domain.docube.data.Category;
+import com.example.demo.domain.docube.data.Docube;
 import com.example.demo.es.DefaultActionListener;
 import com.example.demo.es.repository.ESRepository;
 import com.example.demo.es.repository.ElasticSearchRepository;
@@ -10,20 +9,13 @@ import com.example.demo.es.util.ESNameFactory;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -87,20 +79,7 @@ public class DocubeESRepository extends ESRepository<Docube> implements ElasticS
 		}
 	}
 
-	@Override
-	public void delete(String documentId) throws IOException {
-		UpdateRequest updateRequest = new UpdateRequest();
-		updateRequest.index(indexName);
-		updateRequest.type(type);
-		updateRequest.id(documentId);
 
-		updateRequest.doc(jsonBuilder()
-			.startObject()
-			.field("isDeleted", true)
-			.endObject());
-
-		client.updateAsync(updateRequest, RequestOptions.DEFAULT, new DefaultActionListener<>());
-	}
 
 	public void increaseLike(String documentId) throws IOException {
 		UpdateRequest updateRequest = new UpdateRequest(indexName, type, documentId);

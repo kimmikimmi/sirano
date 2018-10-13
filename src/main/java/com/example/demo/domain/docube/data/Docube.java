@@ -1,7 +1,6 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.docube.data;
 
 import lombok.*;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.List;
@@ -13,12 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @NoArgsConstructor
-@Accessors(chain = true)
-public class DocubeDto {
-	private String docubeId;
-	private String userId;
+@EqualsAndHashCode
+public class Docube {
+	private String id;
 
 	private String title;
 	private String body;
@@ -31,6 +28,11 @@ public class DocubeDto {
 
 	private String category;
 
-	private Date updatedDate;
 	private Date createdDate;
+	private Date updateDate;
+
+	private boolean isDeleted;
+
+	private String userId;
+
 }

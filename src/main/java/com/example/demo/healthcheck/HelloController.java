@@ -1,8 +1,8 @@
 package com.example.demo.healthcheck;
 
-import com.example.demo.domain.data.Category;
-import com.example.demo.domain.dto.DocubeDto;
-import com.example.demo.domain.service.DocubeManageService;
+import com.example.demo.domain.docube.data.Category;
+import com.example.demo.domain.docube.dto.DocubeDto;
+import com.example.demo.domain.docube.service.DocubeManageService;
 import com.example.demo.es.ElasticsearchProperties;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;

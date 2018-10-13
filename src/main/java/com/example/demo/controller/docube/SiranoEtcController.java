@@ -1,15 +1,11 @@
-package com.example.demo.controller;
+package com.example.demo.controller.docube;
 
-import com.example.demo.domain.data.Category;
-import com.google.common.collect.Lists;
+import com.example.demo.domain.docube.data.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 

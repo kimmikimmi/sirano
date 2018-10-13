@@ -37,14 +37,6 @@ public abstract class ESRepository<T> {
 		this.client = client;
 	}
 
-	public void createIndex(T document) {
-		Gson gson = new Gson();
-
-		IndexRequest request = new IndexRequest(indexName, indexName);
-
-		request.source(gson.toJson(document), XContentType.JSON);
-		client.indexAsync(request, RequestOptions.DEFAULT, new DefaultActionListener<>());
-	}
 
 	public void insert(T document) {
 		Gson gson = new Gson();
@@ -61,6 +53,20 @@ public abstract class ESRepository<T> {
 		GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
 
 		return gson.fromJson(getResponse.getSourceAsString(), clazz);
+	}
+
+	public void delete(String documentId) throws IOException {
+		UpdateRequest updateRequest = new UpdateRequest();
+		updateRequest.index(indexName);
+		updateRequest.type(type);
+		updateRequest.id(documentId);
+
+		updateRequest.doc(jsonBuilder()
+			.startObject()
+			.field("isDeleted", true)
+			.endObject());
+
+		client.updateAsync(updateRequest, RequestOptions.DEFAULT, new DefaultActionListener<>());
 	}
 
 }

@@ -1,7 +1,7 @@
-package com.example.demo.domain;
+package com.example.demo.domain.docube;
 
-import com.example.demo.domain.data.Docube;
-import com.example.demo.domain.dto.DocubeDto;
+import com.example.demo.domain.docube.data.Docube;
+import com.example.demo.domain.docube.dto.DocubeDto;
 
 import java.util.Date;
 

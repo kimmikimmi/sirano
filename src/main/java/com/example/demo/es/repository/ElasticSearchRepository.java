@@ -23,11 +23,5 @@ public interface ElasticSearchRepository<T> {
 	 */
 	List<T> searchAllInType() throws IOException;
 
-	/**
-	 * 해당 documentId 에 해당하는 document 를 제거한다.
-	 * @param documentId
-	 * @throws IOException
-	 */
-	void delete(String documentId) throws IOException;
 
 }
