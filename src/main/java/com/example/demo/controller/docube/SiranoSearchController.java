@@ -1,6 +1,7 @@
 package com.example.demo.controller.docube;
 
 import com.example.demo.domain.docube.data.Category;
+import com.example.demo.domain.docube.data.Docube;
 import com.example.demo.domain.docube.dto.DocubeDto;
 import com.example.demo.domain.docube.service.DocubeManageService;
 import com.google.common.base.Preconditions;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author : Jaden

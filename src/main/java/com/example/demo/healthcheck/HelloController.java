@@ -60,7 +60,7 @@ public class HelloController {
 
 		return "Hello World!";
 	}
-	@RequestMapping(value = "/hello/", method = RequestMethod.GET)
+	@RequestMapping(value = "/hello2", method = RequestMethod.GET)
 	@ResponseBody
 	public String hello2() {
 

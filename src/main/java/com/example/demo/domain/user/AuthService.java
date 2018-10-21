@@ -47,10 +47,18 @@ public class AuthService {
 		return true;
 	}
 
-	public boolean checkIfIsAuthorized(UserDto userDto) throws IOException {
-		val authorizedUser = userESRepository.searchByUserIdAndToken(userDto.getUserId(), userDto.getToken());
+	public boolean checkIfIsAuthorized(UserDto userDto) {
+		return checkIfIsAuthorized(userDto.getUserId(), userDto.getToken());
+	}
 
-		return authorizedUser.isPresent();
+	public boolean checkIfIsAuthorized(String userId, String token) {
+		try {
+			return userESRepository.searchByUserIdAndToken(userId, token).isPresent();
+		} catch (IOException e) {
+			log.error("IO exception occurs", e);
+			return false;
+		}
+
 	}
 
 	public void authorizeUser(UserDto userDto) throws IOException {
